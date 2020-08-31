@@ -1,0 +1,130 @@
+###
+#-------------------RESTAURANTS----------------------
+#get all restaurants
+GET http://localhost:8080/restaurantvote/restaurants
+Accept: application/json
+
+###
+
+#get restaurant
+GET http://localhost:8080/restaurantvote/restaurants/200003
+Accept: application/json
+
+###
+
+#delete restaurant
+DELETE http://localhost:8080/restaurantvote/restaurants/200000
+
+###
+
+#update restaurant
+POST http://localhost:8080/restaurantvote/restaurants
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "200003",
+"name":"Кафе-народное"
+}
+
+###
+
+#----------------------VOTES----------------------------------
+#get all votes
+GET http://localhost:8080/restaurantvote/votes/
+###
+
+#get all votes from userId
+GET http://localhost:8080/restaurantvote/votes/users/100000
+Accept: application/json
+
+###
+
+#get all votes from restaurantId
+GET http://localhost:8080/restaurantvote/votes/restaurants/200000
+Accept: application/json
+
+###
+
+#delete vote from user by voteId and userId
+DELETE http://localhost:8080/restaurantvote/votes/300002/users/100000
+
+###
+
+#update vote user for restaurant
+POST http://localhost:8080/restaurantvote/votes/restaurants/200001
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user": {
+    "id": "100002",
+    "name": "not use",
+    "email": "not use"
+  }
+}
+
+###
+
+#---------------------------------------USER-------------------------------
+#get all users
+GET http://localhost:8080/restaurantvote/users
+Accept: application/json
+
+###
+
+#get by id
+GET http://localhost:8080/restaurantvote/users/100002
+Accept: application/json
+
+###
+
+#delete user by id
+DELETE http://localhost:8080/restaurantvote/users/100000
+
+###
+
+#update user
+POST http://localhost:8080/restaurantvote/users
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "100002",
+  "name": "Крендель",
+  "email": "Krendel@notuse.com",
+  "password": "12345"
+}
+
+###
+
+#---------------------------------------------DISH---------------------------------------
+
+#get dish by id and restaurantId
+GET http://localhost:8080/restaurantvote/dishes/400000/restaurants/200000
+Accept: application/json
+
+###
+
+#get all dishes by restaurantId
+GET http://localhost:8080/restaurantvote/dishes/restaurants/200003
+Accept: application/json
+
+###
+
+#delete dish by id and restaurantId
+DELETE http://localhost:8080/restaurantvote/dishes/400000/restaurants/200000
+
+###
+
+POST http://localhost:8080/restaurantvote/dishes/restaurants/200003
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "400006",
+  "price": "220",
+  "description": "Гречка"
+}
+
+###

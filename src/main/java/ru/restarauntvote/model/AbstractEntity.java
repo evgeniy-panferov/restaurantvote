@@ -8,7 +8,7 @@ public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     protected AbstractEntity(int id) {
         this.id = id;
@@ -18,7 +18,7 @@ public abstract class AbstractEntity {
 
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

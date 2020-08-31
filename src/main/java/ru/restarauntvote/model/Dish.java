@@ -1,15 +1,21 @@
 package ru.restarauntvote.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dishes")
 public class Dish extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id")
+    @JsonBackReference(value = "restaurantDish")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Restaurant restaurant;
 
     @Column(name = "price", nullable = false)
@@ -20,15 +26,9 @@ public class Dish extends AbstractEntity {
     private String description;
 
     @Column(name = "date")
-    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime date;
-
-    public Dish(Restaurant restaurant, int price, String description, LocalDateTime date) {
-        this.restaurant = restaurant;
-        this.price = price;
-        this.description = description;
-        this.date = date;
-    }
 
     public Dish() {
     }

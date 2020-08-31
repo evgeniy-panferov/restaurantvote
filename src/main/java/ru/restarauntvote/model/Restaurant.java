@@ -1,5 +1,8 @@
 package ru.restarauntvote.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -12,14 +15,12 @@ public class Restaurant extends AbstractEntity {
     @NotBlank
     private String name;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant")
+    @JsonManagedReference("restaurantDish")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Dish> menu;
 
-    public Restaurant(int id, String name) {
-        super(id);
-        this.name = name;
-    }
-    public Restaurant(){
+    public Restaurant() {
 
     }
 
