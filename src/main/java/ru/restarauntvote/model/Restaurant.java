@@ -3,17 +3,15 @@ package ru.restarauntvote.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
 @Table(name = "restaurants")
-public class Restaurant extends AbstractEntity {
-
-    @Column(name = "name", nullable = false)
-    @NotBlank
-    private String name;
+public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant")
     @JsonManagedReference("restaurantDish")

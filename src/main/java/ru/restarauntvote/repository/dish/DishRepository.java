@@ -12,5 +12,5 @@ public interface DishRepository {
 
     Dish save(Dish dish, int restaurantId);
 
-    void delete(int id, int restaurantId);
+    boolean delete(int id, int restaurantId);
 }

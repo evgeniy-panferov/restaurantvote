@@ -8,9 +8,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.restarauntvote.model.Vote;
 import ru.restarauntvote.repository.vote.VoteRepository;
+import ru.restarauntvote.util.SecurityUtil;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static ru.restarauntvote.util.ValidationUtil.checkNew;
+import static ru.restarauntvote.util.ValidationUtil.checkNotFoundWithId;
 
 @RestController
 @RequestMapping(value = "/votes")
@@ -31,29 +35,39 @@ public class VoteController {
         return voteRepository.getAll();
     }
 
-    @GetMapping(value = "/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Vote> getAllFromUser(@PathVariable int userId) {
+    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Vote> getAllFromUser() {
+        int userId = SecurityUtil.authUserId();
         log.info("getAllFromUser, userId - {}", userId);
         return voteRepository.getAllFromUser(userId);
     }
 
-    @GetMapping(value = "/restaurants/{restaurantId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/restaurants/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getAllFromRestaurant(@PathVariable int restaurantId) {
         log.info("getAllFromRestaurant restaurantId - {}", restaurantId);
-        return voteRepository.getByRestaurantId(restaurantId);
+        return checkNotFoundWithId(voteRepository.getByRestaurantId(restaurantId), restaurantId);
     }
 
     @PostMapping(value = "/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void createOrUpdate(@Valid @RequestBody Vote vote, @PathVariable int restaurantId) {
+    public void create(@Valid @RequestBody Vote vote, @PathVariable int restaurantId) {
         log.info("create vote, vote - {}, restaurantId - {}", vote, restaurantId);
+        checkNew(vote);
         voteRepository.save(vote, restaurantId);
     }
 
-    @DeleteMapping("/{id}/users/{userId}")
+    @PutMapping(value = "/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id, @PathVariable int userId) {
+    public void update(@Valid @RequestBody Vote vote, @PathVariable int restaurantId) {
+        log.info("update vote, vote - {}, restaurantId - {}", vote, restaurantId);
+        checkNotFoundWithId(voteRepository.save(vote, restaurantId), vote.getId());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id) {
+        int userId = SecurityUtil.authUserId();
         log.info("delete vote, id - {}, userId - {}", id, userId);
-        voteRepository.delete(id, userId);
+        checkNotFoundWithId(voteRepository.delete(id, userId), id);
     }
 }

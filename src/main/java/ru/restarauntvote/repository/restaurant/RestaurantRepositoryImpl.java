@@ -16,6 +16,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @Override
     public Restaurant save(Restaurant restaurant) {
+        if (!restaurant.isNew() && get(restaurant.getId()) == null) {
+            return null;
+        }
+
         return crudRestaurantRepository.save(restaurant);
     }
 
@@ -30,7 +34,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     }
 
     @Override
-    public void delete(int id) {
-        crudRestaurantRepository.deleteById(id);
+    public boolean delete(int id) {
+        return crudRestaurantRepository.delete(id) != 0;
     }
 }

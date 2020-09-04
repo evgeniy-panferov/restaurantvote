@@ -1,64 +1,104 @@
 ###
 #-------------------RESTAURANTS----------------------
-#get all restaurants
-GET http://localhost:8080/restaurantvote/restaurants
+###get all
+GET http://localhost:8080/restaurantvote/restaurants/get
 Accept: application/json
+Authorization: Basic abc@abc.com user
 
 ###
 
-#get restaurant
-GET http://localhost:8080/restaurantvote/restaurants/200003
+#get
+GET http://localhost:8080/restaurantvote/restaurants/100002
 Accept: application/json
+Authorization: Basic abc1@abc.com admin
 
 ###
 
-#delete restaurant
-DELETE http://localhost:8080/restaurantvote/restaurants/200000
+###delete
+DELETE http://localhost:8080/restaurantvote/restaurants/100015
+Authorization: Basic abc1@abc.com admin
 
 ###
 
-#update restaurant
+###create
 POST http://localhost:8080/restaurantvote/restaurants
 Accept: application/json
 Content-Type: application/json
+Authorization: Basic abc1@abc.com admin
 
 {
-  "id": "200003",
-"name":"Кафе-народное"
+  "name": "Кафе-тест"
+}
+
+###
+
+###update
+PUT http://localhost:8080/restaurantvote/restaurants
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic abc1@abc.com admin
+
+{
+  "id": 100015,
+  "name": "Кафе-мафе"
 }
 
 ###
 
 #----------------------VOTES----------------------------------
-#get all votes
+###get all
 GET http://localhost:8080/restaurantvote/votes/
-###
-
-#get all votes from userId
-GET http://localhost:8080/restaurantvote/votes/users/100000
+Authorization: Basic abc@abc.com user
 Accept: application/json
 
 ###
 
-#get all votes from restaurantId
-GET http://localhost:8080/restaurantvote/votes/restaurants/200000
+###get all by user
+GET http://localhost:8080/restaurantvote/votes/users/
+Authorization: Basic abc@abc.com user
 Accept: application/json
 
 ###
 
-#delete vote from user by voteId and userId
-DELETE http://localhost:8080/restaurantvote/votes/300002/users/100000
+###get all from restaurantId
+GET http://localhost:8080/restaurantvote/votes/restaurants/100002
+Accept: application/json
+Authorization: Basic abc@abc.com user
 
 ###
 
-#update vote user for restaurant
-POST http://localhost:8080/restaurantvote/votes/restaurants/200001
+###delete by user by voteId and userId
+DELETE http://localhost:8080/restaurantvote/votes/100011
+Authorization: Basic abc@abc.com user
+
+###
+
+###create by user for restaurant
+POST http://localhost:8080/restaurantvote/votes/restaurants/100002
+Authorization: Basic abc@abc.com user
 Accept: application/json
 Content-Type: application/json
 
 {
   "user": {
-    "id": "100002",
+    "id": "100000",
+    "name": "not use",
+    "email": "not use"
+  }
+}
+
+###
+
+###update by user for restaurant
+PUT http://localhost:8080/restaurantvote/votes/restaurants/100003
+Authorization: Basic abc@abc.com user
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "100015",
+  "user": {
+    "id": "100000",
     "name": "not use",
     "email": "not use"
   }
@@ -67,31 +107,48 @@ Content-Type: application/json
 ###
 
 #---------------------------------------USER-------------------------------
-#get all users
-GET http://localhost:8080/restaurantvote/users
+###get all
+GET http://localhost:8080/restaurantvote/users/admin
 Accept: application/json
+Authorization: Basic abc1@abc.com admin
 
 ###
 
-#get by id
-GET http://localhost:8080/restaurantvote/users/100002
+###get by id
+GET http://localhost:8080/restaurantvote/users/
 Accept: application/json
+Authorization: Basic abc1@abc.com admin
 
 ###
 
-#delete user by id
-DELETE http://localhost:8080/restaurantvote/users/100000
+###delete by id
+DELETE http://localhost:8080/restaurantvote/users/
+Authorization: Basic Krendel@notuse.com 12345
 
 ###
 
-#update user
-POST http://localhost:8080/restaurantvote/users
+###create
+POST http://localhost:8080/restaurantvote/users/register
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": "100002",
-  "name": "Крендель",
+  "name": "Вася",
+  "email": "Krendel@notuse.com",
+  "password": "12345"
+}
+
+###
+
+###update
+PUT http://localhost:8080/restaurantvote/users
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic Krendel@notuse.com 12345
+
+{
+  "id": "100015",
+  "name": "Уже не вася",
   "email": "Krendel@notuse.com",
   "password": "12345"
 }
@@ -100,29 +157,47 @@ Content-Type: application/json
 
 #---------------------------------------------DISH---------------------------------------
 
-#get dish by id and restaurantId
-GET http://localhost:8080/restaurantvote/dishes/400000/restaurants/200000
+###get by id and restaurantId
+GET http://localhost:8080/restaurantvote/dishes/100005/restaurants/100002
 Accept: application/json
+Authorization: Basic abc1@abc.com admin
 
 ###
 
-#get all dishes by restaurantId
-GET http://localhost:8080/restaurantvote/dishes/restaurants/200003
+###get all by restaurantId
+GET http://localhost:8080/restaurantvote/dishes/restaurants/100004
 Accept: application/json
+Authorization: Basic abc1@abc.com admin
 
 ###
 
-#delete dish by id and restaurantId
-DELETE http://localhost:8080/restaurantvote/dishes/400000/restaurants/200000
+###delete by id and restaurantId
+DELETE http://localhost:8080/restaurantvote/dishes/100005/restaurants/100002
+Authorization: Basic abc1@abc.com admin
 
 ###
 
-POST http://localhost:8080/restaurantvote/dishes/restaurants/200003
+###create
+POST http://localhost:8080/restaurantvote/dishes/restaurants/100004
 Accept: application/json
 Content-Type: application/json
+Authorization: Basic abc1@abc.com admin
 
 {
-  "id": "400006",
+  "price": "220",
+  "description": "Гречка"
+}
+
+###
+
+###update
+PUT http://localhost:8080/restaurantvote/dishes/restaurants/100004
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic abc1@abc.com admin
+
+{
+  "id": 100010,
   "price": "220",
   "description": "Гречка"
 }

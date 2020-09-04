@@ -11,6 +11,8 @@ import ru.restarauntvote.repository.user.CrudUserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static ru.restarauntvote.util.ValidationUtil.checkNotFound;
+
 @Repository
 public class VoteRepositoryImpl implements VoteRepository {
 
@@ -29,15 +31,27 @@ public class VoteRepositoryImpl implements VoteRepository {
     public List<Vote> getAllFromUser(int userId) {
         return crudVoteRepository.getAllFromUser(userId);
     }
+
     @Override
     public List<Vote> getAll() {
         return crudVoteRepository.getAll();
     }
 
     @Override
-    public Vote save(Vote vote,int restaurantId) {
-        User user = crudUserRepository.findById(vote.getUser().getId()).orElse(null);
+    public Vote get(int id) {
+        return crudVoteRepository.get(id);
+    }
+
+    @Override
+    public Vote save(Vote vote, int restaurantId) {
         Restaurant restaurant = crudRestaurantRepository.findById(restaurantId).orElse(null);
+        User user = crudUserRepository.findById(vote.getUser().getId()).orElse(null);
+        if (!vote.isNew() && get(vote.getId()) == null) {
+            return null;
+        }
+        checkNotFound(restaurant, String.format("Restaurant with id : %s not found", restaurantId));
+        checkNotFound(user, String.format("User with id : %s not found", vote.getUser().getId()));
+
         vote.setDate(LocalDateTime.now());
         vote.setRestaurantId(restaurant.getId());
         vote.setUser(user);
@@ -48,12 +62,13 @@ public class VoteRepositoryImpl implements VoteRepository {
 
     @Override
     @Transactional
-    public void delete(int id, int userId) {
-        crudVoteRepository.delete(id, userId);
+    public boolean delete(int id, int userId) {
+        return crudVoteRepository.delete(id, userId) != 0;
     }
 
     @Override
     public List<Vote> getByRestaurantId(int restaurantId) {
-        return crudVoteRepository.getByRestaurantId(restaurantId);
+        List<Vote> byRestaurantId = crudVoteRepository.getByRestaurantId(restaurantId);
+        return byRestaurantId.size() == 0 ? null : byRestaurantId;
     }
 }

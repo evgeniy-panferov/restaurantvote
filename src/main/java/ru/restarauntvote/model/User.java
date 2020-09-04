@@ -3,18 +3,22 @@ package ru.restarauntvote.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.BatchSize;
+import org.springframework.util.CollectionUtils;
+import ru.restarauntvote.HasIdAndEmail;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
-public class User extends AbstractEntity {
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
+public class User extends AbstractNamedEntity implements HasIdAndEmail {
 
     @Column(name = "password", nullable = false)
     @NotBlank
@@ -28,17 +32,37 @@ public class User extends AbstractEntity {
     @Size(max = 100)
     private String email;
 
-    @Column(name = "name", nullable = false)
-    @NotBlank
-    private String name;
-
     @Column(name = "lastTimeVote")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastTimeVote;
 
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique_idx")})
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @BatchSize(size = 200)
+    private Set<Role> roles;
+
     public User() {
 
+    }
+
+    public User(Integer id, String name, String email, String password, LocalDateTime lastTimeVote, Role role, Role... roles) {
+        this(id, name, email, password, lastTimeVote, EnumSet.of(role, roles));
+    }
+
+    public User(Integer id, String password, String email, String name, LocalDateTime lastTimeVote, Collection<Role> roles) {
+        super(id, name);
+        this.password = password;
+        this.email = email;
+        this.lastTimeVote = lastTimeVote;
+        setRoles(roles);
+    }
+
+    public User(User user) {
+        this(user.getId(), user.getPassword(), user.getEmail(), user.getName(), user.getLastTimeVote(), user.getRoles());
     }
 
     public String getEmail() {
@@ -71,5 +95,24 @@ public class User extends AbstractEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", lastTimeVote=" + lastTimeVote +
+                ", roles=" + roles +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

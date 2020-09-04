@@ -3,10 +3,13 @@ package ru.restarauntvote.repository.dish;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.restarauntvote.model.Dish;
+import ru.restarauntvote.model.Restaurant;
 import ru.restarauntvote.repository.restaurant.CrudRestaurantRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static ru.restarauntvote.util.ValidationUtil.checkNotFound;
 
 @Repository
 public class DishRepositoryImpl implements DishRepository {
@@ -34,13 +37,18 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public Dish save(Dish dish, int restaurantId) {
-        dish.setRestaurant(crudRestaurantRepository.findById(restaurantId).orElse(null));
+        Restaurant restaurant = crudRestaurantRepository.findById(restaurantId).orElse(null);
+        checkNotFound(restaurant, String.format("Restaurant with id : %s not found", restaurantId));
+        if (!dish.isNew() && get(dish.getId(), restaurantId) == null) {
+            return null;
+        }
+        dish.setRestaurant(restaurant);
         dish.setDate(LocalDateTime.now());
         return crudDishRepository.save(dish);
     }
 
     @Override
-    public void delete(int id, int restaurantId) {
-        crudDishRepository.delete(id, restaurantId);
+    public boolean delete(int id, int restaurantId) {
+        return crudDishRepository.delete(id, restaurantId) != 0;
     }
 }

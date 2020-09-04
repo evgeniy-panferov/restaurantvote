@@ -10,9 +10,11 @@ public interface VoteRepository {
 
     Vote save(Vote vote, int restaurantId);
 
-    void delete(int id, int userId);
+    boolean delete(int id, int userId);
 
     List<Vote> getByRestaurantId(int restaurantId);
 
     List<Vote> getAll();
+
+    Vote get(int id);
 }

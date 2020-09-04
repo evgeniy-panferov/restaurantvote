@@ -25,8 +25,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void delete(int id) {
-        crudUserRepository.deleteById(id);
+    public boolean delete(int id) {
+        return crudUserRepository.delete(id) != 0;
     }
 
     @Override

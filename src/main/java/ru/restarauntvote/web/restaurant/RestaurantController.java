@@ -12,6 +12,8 @@ import ru.restarauntvote.repository.restaurant.RestaurantRepository;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.restarauntvote.util.ValidationUtil.*;
+
 @RestController
 @RequestMapping(value = "/restaurants")
 public class RestaurantController {
@@ -25,7 +27,7 @@ public class RestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "get", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Restaurant> getAll() {
         log.info("getAll restaurants");
         return restaurantRepository.getAll();
@@ -34,20 +36,29 @@ public class RestaurantController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Restaurant get(@PathVariable int id) {
         log.info("get restaurant, id - {}", id);
-        return restaurantRepository.get(id);
+        return checkNotFound(restaurantRepository.get(id), String.format("Restaurant with id : %s not found", id));
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void createOrUpdate(@Valid @RequestBody Restaurant restaurant) {
-        log.info("createOrUpdate restaurant - {}", restaurant);
+    public void create(@Valid @RequestBody Restaurant restaurant) {
+        log.info("create restaurant - {}", restaurant);
+        checkNew(restaurant);
         restaurantRepository.save(restaurant);
+    }
+
+    @PutMapping
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody Restaurant restaurant) {
+        log.info("update restaurant - {}", restaurant);
+        checkNotFound(restaurantRepository.save(restaurant), String.format("Restaurant - %s with id : %s not found",
+                restaurant.getName(), restaurant.getId()));
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant, id - {}", id);
-        restaurantRepository.delete(id);
+        checkNotFoundWithId(restaurantRepository.delete(id), id);
     }
 }
