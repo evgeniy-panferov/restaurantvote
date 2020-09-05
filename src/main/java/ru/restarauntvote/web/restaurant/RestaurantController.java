@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.restarauntvote.model.Restaurant;
 import ru.restarauntvote.repository.restaurant.RestaurantRepository;
+import ru.restarauntvote.to.RestaurantTo;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,7 +29,7 @@ public class RestaurantController {
     }
 
     @GetMapping(value = "get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Restaurant> getAll() {
+    public List<RestaurantTo> getAll() {
         log.info("getAll restaurants");
         return restaurantRepository.getAll();
     }

@@ -2,6 +2,8 @@ package ru.restarauntvote.repository.restaurant;
 
 import org.springframework.stereotype.Repository;
 import ru.restarauntvote.model.Restaurant;
+import ru.restarauntvote.to.RestaurantTo;
+import ru.restarauntvote.util.RestaurantUtil;
 
 import java.util.List;
 
@@ -29,8 +31,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     }
 
     @Override
-    public List<Restaurant> getAll() {
-        return crudRestaurantRepository.findAll();
+    public List<RestaurantTo> getAll() {
+        return RestaurantUtil.createListTo(crudRestaurantRepository.findAll());
     }
 
     @Override
