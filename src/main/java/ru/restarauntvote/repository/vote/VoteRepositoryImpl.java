@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.restarauntvote.util.ValidationUtil.checkNotFound;
+import static ru.restarauntvote.util.ValidationUtil.checkTime;
 
 @Repository
 public class VoteRepositoryImpl implements VoteRepository {
@@ -49,8 +50,10 @@ public class VoteRepositoryImpl implements VoteRepository {
         if (!vote.isNew() && get(vote.getId()) == null) {
             return null;
         }
+
         checkNotFound(restaurant, String.format("Restaurant with id : %s not found", restaurantId));
         checkNotFound(user, String.format("User with id : %s not found", vote.getUser().getId()));
+        checkTime(user.getLastTimeVote());
 
         vote.setDate(LocalDateTime.now());
         vote.setRestaurantId(restaurant.getId());

@@ -3,9 +3,11 @@ package ru.restarauntvote.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.util.CollectionUtils;
 import ru.restarauntvote.HasIdAndEmail;
+import ru.restarauntvote.util.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -20,23 +22,27 @@ import java.util.Set;
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity implements HasIdAndEmail {
 
+    @JsonView(View.UserRest.class)
     @Column(name = "password", nullable = false)
     @NotBlank
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @JsonView(View.UserRest.class)
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
     @Size(max = 100)
     private String email;
 
+    @JsonView(View.UserRest.class)
     @Column(name = "lastTimeVote")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastTimeVote;
 
+    @JsonView(View.VoteRest.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique_idx")})

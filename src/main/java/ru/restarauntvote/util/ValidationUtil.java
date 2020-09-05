@@ -3,8 +3,11 @@ package ru.restarauntvote.util;
 import ru.restarauntvote.HasId;
 import ru.restarauntvote.util.exception.IllegalRequestDataException;
 import ru.restarauntvote.util.exception.NotFoundException;
+import ru.restarauntvote.util.exception.TimeIsOverException;
 
 import javax.validation.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Set;
 
 public class ValidationUtil {
@@ -37,12 +40,6 @@ public class ValidationUtil {
         checkNotFound(found, "id=" + id);
     }
 
-    public static void checkInputId(int id, int referenceId) {
-        if (id != referenceId) {
-            throw new IllegalRequestDataException(id + " must must match with " + referenceId);
-        }
-    }
-
     public static <T> T checkNotFound(T object, String msg) {
         checkNotFound(object != null, msg);
         return object;
@@ -51,6 +48,14 @@ public class ValidationUtil {
     public static void checkNotFound(boolean found, String arg) {
         if (!found) {
             throw new NotFoundException(arg);
+        }
+    }
+
+
+    public static void checkTime(LocalDateTime time) {
+        LocalDateTime dateTimeNow = LocalDateTime.now();
+        if (time.toLocalDate().equals(dateTimeNow.toLocalDate()) && dateTimeNow.toLocalTime().isAfter(LocalTime.of(11, 0))) {
+            throw new TimeIsOverException("Dear User! Your vote should be change before 11:00");
         }
     }
 

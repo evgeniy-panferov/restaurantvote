@@ -1,5 +1,6 @@
 package ru.restarauntvote.web.vote;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.restarauntvote.model.Vote;
 import ru.restarauntvote.repository.vote.VoteRepository;
 import ru.restarauntvote.util.SecurityUtil;
+import ru.restarauntvote.util.View;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -48,6 +50,7 @@ public class VoteController {
         return checkNotFoundWithId(voteRepository.getByRestaurantId(restaurantId), restaurantId);
     }
 
+    @JsonView(View.VoteRest.class)
     @PostMapping(value = "/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void create(@Valid @RequestBody Vote vote, @PathVariable int restaurantId) {
@@ -56,6 +59,7 @@ public class VoteController {
         voteRepository.save(vote, restaurantId);
     }
 
+    @JsonView(View.VoteRest.class)
     @PutMapping(value = "/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Vote vote, @PathVariable int restaurantId) {
