@@ -3,6 +3,8 @@ package ru.restarauntvote.web.restaurant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,7 @@ public class RestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
+    @Cacheable(value = "restaurants")
     @GetMapping(value = "get", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RestaurantTo> getAll() {
         log.info("getAll restaurants");
@@ -40,6 +43,7 @@ public class RestaurantController {
         return checkNotFound(restaurantRepository.get(id), String.format("Restaurant with id : %s not found", id));
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void create(@Valid @RequestBody Restaurant restaurant) {
@@ -48,6 +52,7 @@ public class RestaurantController {
         restaurantRepository.save(restaurant);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @PutMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant) {
@@ -56,6 +61,7 @@ public class RestaurantController {
                 restaurant.getName(), restaurant.getId()));
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {

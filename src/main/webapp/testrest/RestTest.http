@@ -1,8 +1,15 @@
 #-------------------RESTAURANTS----------------------
-###get all
+###get all user
 GET http://localhost:8080/restaurantvote/restaurants/get
 Accept: application/json
 Authorization: Basic abc@abc.com user
+
+###
+
+###get all admin
+GET http://localhost:8080/restaurantvote/restaurants/get
+Accept: application/json
+Authorization: Basic abc1@abc.com admin
 
 ###
 

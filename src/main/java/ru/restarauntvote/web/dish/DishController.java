@@ -3,6 +3,7 @@ package ru.restarauntvote.web.dish;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,7 @@ public class DishController {
         return checkNotFoundWithId(dishRepository.get(id, restaurantId), id);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @PostMapping(value = "/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void create(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
@@ -48,6 +50,7 @@ public class DishController {
         dishRepository.save(dish, restaurantId);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @PutMapping(value = "/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
@@ -55,6 +58,7 @@ public class DishController {
         checkNotFoundWithId(dishRepository.save(dish, restaurantId), dish.getId());
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @DeleteMapping(value = "/{id}/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id, @PathVariable int restaurantId) {
