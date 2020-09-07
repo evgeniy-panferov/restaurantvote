@@ -34,13 +34,13 @@ Restaurant have menu, that contains some dishes, usually 2-5 position, but can b
 
 <h3>Some curls request</h3>
 
-###get all restaurant user
+<h4>get all restaurant user</h4>
 curl -u abc@abc.com:user http://localhost:8080/restaurantvote/restaurants/get
 
-###create restaurant
+<h4>create restaurant</h4>
 curl -u abc1@abc.com:admin -H "Content-Type: application/json" -d "{\"name\": \"Restaurant - Test\"}" http://localhost:8080/restaurantvote/restaurants
   
-###create vote by user for restaurant
+<h4>create vote by user for restaurant</h4>
 curl -u abc@abc.com:user -H "Content-type: application/json" -d "{\"user\": {\"id\": \"100000\"}}" http://localhost:8080/restaurantvote/votes/restaurants/100002
 
-###Other request your can see in RestTest.http 
+<h4>Other request your can see in RestTest.http</h4> 
