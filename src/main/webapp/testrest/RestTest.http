@@ -1,13 +1,13 @@
 #-------------------RESTAURANTS----------------------
 ###get all user
-GET http://localhost:8080/restaurantvote/restaurants/get
+GET http://localhost:8080/restaurantvote/restaurants
 Accept: application/json
 Authorization: Basic abc@abc.com user
 
 ###
 
 ###get all admin
-GET http://localhost:8080/restaurantvote/restaurants/get
+GET http://localhost:8080/restaurantvote/restaurants
 Accept: application/json
 Authorization: Basic abc1@abc.com admin
 
@@ -16,12 +16,12 @@ Authorization: Basic abc1@abc.com admin
 #get
 GET http://localhost:8080/restaurantvote/restaurants/100002
 Accept: application/json
-Authorization: Basic abc1@abc.com admin
+Authorization: Basic abc@abc.com user
 
 ###
 
 ###delete
-DELETE http://localhost:8080/restaurantvote/restaurants/100015
+DELETE http://localhost:8080/restaurantvote/restaurants/100002
 Authorization: Basic abc1@abc.com admin
 
 ###
@@ -53,41 +53,41 @@ Authorization: Basic abc1@abc.com admin
 
 #----------------------VOTES----------------------------------
 ###get all
-GET http://localhost:8080/restaurantvote/votes/
+GET http://localhost:8080/restaurantvote/restaurants/votes/
 Authorization: Basic abc@abc.com user
 Accept: application/json
 
 ###
 
 ###get all by user
-GET http://localhost:8080/restaurantvote/votes/users/
+GET http://localhost:8080/restaurantvote/restaurants/users/votes/
 Authorization: Basic abc@abc.com user
 Accept: application/json
 
 ###
 
 ###get all by admin
-GET http://localhost:8080/restaurantvote/votes/users/
+GET http://localhost:8080/restaurantvote/restaurants/users/votes/
 Authorization: Basic abc1@abc.com admin
 Accept: application/json
 
 ###
 
 ###get all from restaurantId
-GET http://localhost:8080/restaurantvote/votes/restaurants/100002
+GET http://localhost:8080/restaurantvote/restaurants/100002/votes/
 Accept: application/json
 Authorization: Basic abc@abc.com user
 
 ###
 
 ###delete by user by voteId and userId
-DELETE http://localhost:8080/restaurantvote/votes/100011
+DELETE http://localhost:8080/restaurantvote/restaurants/votes/100015/
 Authorization: Basic abc@abc.com user
 
 ###
 
 ###create by user for restaurant
-POST http://localhost:8080/restaurantvote/votes/restaurants/100002
+POST http://localhost:8080/restaurantvote/restaurants/100002/votes/
 Authorization: Basic abc@abc.com user
 Accept: application/json
 Content-Type: application/json
@@ -101,7 +101,7 @@ Content-Type: application/json
 ###
 
 ###update by user for restaurant
-PUT http://localhost:8080/restaurantvote/votes/restaurants/100004
+PUT http://localhost:8080/restaurantvote/restaurants/100004/votes/
 Authorization: Basic abc@abc.com user
 Accept: application/json
 Content-Type: application/json
@@ -114,7 +114,7 @@ Content-Type: application/json
 }
 
 ###update by admin for restaurant
-PUT http://localhost:8080/restaurantvote/votes/restaurants/100003
+PUT http://localhost:8080/restaurantvote/restaurants/100003/votes/
 Authorization: Basic abc1@abc.com admin
 Accept: application/json
 Content-Type: application/json
@@ -181,27 +181,27 @@ Authorization: Basic Krendel@notuse.com 12345
 #---------------------------------------------DISH---------------------------------------
 
 ###get by id and restaurantId
-GET http://localhost:8080/restaurantvote/dishes/100005/restaurants/100002
+GET http://localhost:8080/restaurantvote/restaurants/100002/dishes/100005
 Accept: application/json
 Authorization: Basic abc1@abc.com admin
 
 ###
 
 ###get all by restaurantId
-GET http://localhost:8080/restaurantvote/dishes/restaurants/100004
+GET http://localhost:8080/restaurantvote/restaurants/100004/dishes
 Accept: application/json
 Authorization: Basic abc1@abc.com admin
 
 ###
 
 ###delete by id and restaurantId
-DELETE http://localhost:8080/restaurantvote/dishes/100005/restaurants/100002
+DELETE http://localhost:8080/restaurantvote/restaurants/100002/dishes/100005
 Authorization: Basic abc1@abc.com admin
 
 ###
 
 ###create
-POST http://localhost:8080/restaurantvote/dishes/restaurants/100004
+POST http://localhost:8080/restaurantvote/restaurants/100004/dishes
 Accept: application/json
 Content-Type: application/json
 Authorization: Basic abc1@abc.com admin
@@ -214,15 +214,15 @@ Authorization: Basic abc1@abc.com admin
 ###
 
 ###update
-PUT http://localhost:8080/restaurantvote/dishes/restaurants/100004
+PUT http://localhost:8080/restaurantvote/restaurants/100004/dishes
 Accept: application/json
 Content-Type: application/json
 Authorization: Basic abc1@abc.com admin
 
 {
-  "id": 100010,
+  "id": 100015,
   "price": "220",
-  "description": "Гречка"
+  "description": "уже не Гречка"
 }
 
 ###

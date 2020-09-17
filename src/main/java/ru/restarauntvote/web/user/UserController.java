@@ -50,12 +50,11 @@ public class UserController {
 
     @JsonView(View.UserRest.class)
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public void create(@Valid @RequestBody User user) {
         log.info("create user - {}", user);
         checkNew(user);
         userService.save(createUserWithRoleNotAdmin(user));
-
     }
 
     @JsonView(View.UserRest.class)

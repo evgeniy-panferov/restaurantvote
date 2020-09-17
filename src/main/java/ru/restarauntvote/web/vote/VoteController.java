@@ -19,7 +19,7 @@ import static ru.restarauntvote.util.ValidationUtil.checkNew;
 import static ru.restarauntvote.util.ValidationUtil.checkNotFoundWithId;
 
 @RestController
-@RequestMapping(value = "/votes")
+@RequestMapping(value = "/restaurants")
 public class VoteController {
 
     private static final Logger log = LoggerFactory.getLogger(VoteController.class);
@@ -31,28 +31,28 @@ public class VoteController {
         this.voteRepository = voteRepository;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/votes", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getAll() {
         log.info("getAll");
         return voteRepository.getAll();
     }
 
-    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users/votes", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getAllFromUser() {
         int userId = SecurityUtil.authUserId();
         log.info("getAllFromUser, userId - {}", userId);
         return voteRepository.getAllFromUser(userId);
     }
 
-    @GetMapping(value = "/restaurants/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{restaurantId}/votes", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getAllFromRestaurant(@PathVariable int restaurantId) {
         log.info("getAllFromRestaurant restaurantId - {}", restaurantId);
         return checkNotFoundWithId(voteRepository.getByRestaurantId(restaurantId), restaurantId);
     }
 
     @JsonView(View.VoteRest.class)
-    @PostMapping(value = "/restaurants/{restaurantId}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PostMapping(value = "/{restaurantId}/votes")
+    @ResponseStatus(value = HttpStatus.CREATED)
     public void create(@Valid @RequestBody Vote vote, @PathVariable int restaurantId) {
         log.info("create vote, vote - {}, restaurantId - {}", vote, restaurantId);
         checkNew(vote);
@@ -60,14 +60,14 @@ public class VoteController {
     }
 
     @JsonView(View.VoteRest.class)
-    @PutMapping(value = "/restaurants/{restaurantId}")
+    @PutMapping(value = "/{restaurantId}/votes")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Vote vote, @PathVariable int restaurantId) {
         log.info("update vote, vote - {}, restaurantId - {}", vote, restaurantId);
         checkNotFoundWithId(voteRepository.save(vote, restaurantId), vote.getId());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/votes/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         int userId = SecurityUtil.authUserId();

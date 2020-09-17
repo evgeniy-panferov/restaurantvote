@@ -6,14 +6,21 @@ import java.util.Objects;
 
 public class RestaurantTo {
 
+    protected final int id;
+
     protected final String name;
 
     private final List<DishTo> menu;
 
-    @ConstructorProperties({"name", "menu"})
-    public RestaurantTo(String name, List<DishTo> menu) {
+    @ConstructorProperties({"id", "name", "menu"})
+    public RestaurantTo(int id, String name, List<DishTo> menu) {
+        this.id = id;
         this.name = name;
         this.menu = menu;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

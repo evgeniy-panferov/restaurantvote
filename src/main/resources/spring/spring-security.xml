@@ -9,18 +9,23 @@
 
     <http pattern="/**" use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
         <http-basic/>
-        <intercept-url pattern="/dishes/**" access="hasRole('ADMIN')"/>
-        <intercept-url pattern="/restaurants/get" access="isAuthenticated()"/>
-        <intercept-url pattern="/restaurants/**" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/restaurants/**/votes/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/restaurants/**/votes/" access="isAuthenticated()"/>
+        <intercept-url pattern="/restaurants/**/dishes" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/restaurants/**" method="POST" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/restaurants/**" method="PUT" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/restaurants/**" method="DELETE" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/restaurants/**" access="isAuthenticated()"/>
         <intercept-url pattern="/users/register" access="isAnonymous()"/>
         <intercept-url pattern="/users/admin" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/users/**" access="isAuthenticated()"/>
-        <intercept-url pattern="/votes/**" access="isAuthenticated()"/>
+
         <intercept-url pattern="/**" access="isAnonymous()"/>
         <csrf disabled="true"/>
     </http>
 
-    <beans:bean class="org.springframework.security.crypto.factory.PasswordEncoderFactories" id="passwordEncoder" factory-method="createDelegatingPasswordEncoder"/>
+    <beans:bean class="org.springframework.security.crypto.factory.PasswordEncoderFactories" id="passwordEncoder"
+                factory-method="createDelegatingPasswordEncoder"/>
 
     <authentication-manager>
         <authentication-provider user-service-ref="userService">

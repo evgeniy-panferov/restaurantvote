@@ -30,13 +30,13 @@ public class RestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @Cacheable(value = "restaurants")
-    @GetMapping(value = "get", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RestaurantTo> getAll() {
         log.info("getAll restaurants");
         return restaurantRepository.getAll();
     }
 
+    @Cacheable(value = "restaurants")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Restaurant get(@PathVariable int id) {
         log.info("get restaurant, id - {}", id);
@@ -45,7 +45,7 @@ public class RestaurantController {
 
     @CacheEvict(value = "restaurants", allEntries = true)
     @PostMapping
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public void create(@Valid @RequestBody Restaurant restaurant) {
         log.info("create restaurant - {}", restaurant);
         checkNew(restaurant);
